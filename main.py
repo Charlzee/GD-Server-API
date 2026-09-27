@@ -1,4 +1,5 @@
 import requests
+import base64
 
 def _getDifficultyString(difficultyInt: int = 0, isDemon: bool = False):
     if isDemon:
@@ -45,7 +46,7 @@ def parseLevelData(dataString: str, includeLevelString: bool = True):
         "id": rawDict.get("1", "Unknown"),
         "levelName": rawDict.get("2", "Unknown"),
         "description": rawDict.get("3", "Unknown"),
-        "descriptionDecoded": rawDict.get("3", "Unknown"),
+        "descriptionDecoded": base64.b64decode(rawDict.get("3", "Unknown")),
         "levelString": rawDict.get("4", "Unknown") if includeLevelString else "[Excluded]",
         "version": rawDict.get("5", "Unknown"),
         "playerID": rawDict.get("6", "Unknown"),
