@@ -1,28 +1,5 @@
 import requests
 
-
-url = "http://www.boomlings.com/database/downloadGJLevel22.php"
-
-payload = {
-    "secret": "Wmfd2893gb7",
-    "gameVersion": "22",
-    "binaryVersion": "47",
-    "levelID": "149460650",
-    "inc": "1",
-    "extras": "1"
-}
-
-headers = {
-    "User-Agent": "",
-    "Accept": "*/*",
-    "Content-Type": "application/x-www-form-urlencoded",
-    "Cookie": "gd=1;",
-    "Host": "www.boomlings.com"
-}
-
-serverResponse = requests.post(url, data=payload, headers=headers)
-serverText = serverResponse.text
-
 def _getDifficultyString(difficultyInt: int = 0, isDemon: bool = False):
     if isDemon:
         match difficultyInt:
@@ -115,4 +92,28 @@ def parseLevelData(dataString: str, includeLevelString: bool = True):
     
     return fixedTable
     
-print(parseLevelData(serverText, False))
+def getLevel(id: int, includeLevelString: bool = True):
+    url = "http://www.boomlings.com/database/downloadGJLevel22.php"
+
+    payload = {
+        "secret": "Wmfd2893gb7",
+        "gameVersion": "22",
+        "binaryVersion": "47",
+        "levelID": id,
+        "inc": "1",
+        "extras": "1"
+    }
+
+    headers = {
+        "User-Agent": "",
+        "Accept": "*/*",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Cookie": "gd=1;",
+        "Host": "www.boomlings.com"
+    }
+
+    serverResponse = requests.post(url, data=payload, headers=headers)
+    serverText = serverResponse.text
+    levelData = parseLevelData(serverText, includeLevelString)
+
+    return levelData
