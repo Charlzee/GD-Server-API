@@ -1,5 +1,9 @@
 import requests
 import base64
+from itertools import cycle
+
+def _decryptXOR(data, key: str):
+    return ''.join(chr(ord(char) ^ ord(keyChar)) for char, keyChar in zip(data, cycle(key)))
 
 def _getDifficultyString(difficultyInt: int = 0, isDemon: bool = False):
     if isDemon:
@@ -67,6 +71,7 @@ def parseLevelData(dataString: str, includeLevelString: bool = True):
         "auto": rawDict.get("25", "Unknown"),
         "recordString": rawDict.get("26", "Unknown"),
         "password": rawDict.get("27", "Unknown"),
+        "passwordDecoded": _decryptXOR(base64.b64decode(rawDict.get("27", "Unknown").split("#")[0]).decode("latin1"), "26364")[1:],
         "uploadDate": rawDict.get("28", "Unknown"),
         "updateDate": rawDict.get("29", "Unknown"),
         "copiedID": rawDict.get("30", "Unknown"),
@@ -93,7 +98,7 @@ def parseLevelData(dataString: str, includeLevelString: bool = True):
     
     return fixedTable
     
-def getLevel(id: int, includeLevelString: bool = True):
+def getLevel(id: int, includeLevelString: bool = True, returnRaw: bool = False):
     url = "http://www.boomlings.com/database/downloadGJLevel22.php"
 
     payload = {
@@ -115,6 +120,10 @@ def getLevel(id: int, includeLevelString: bool = True):
 
     serverResponse = requests.post(url, data=payload, headers=headers)
     serverText = serverResponse.text
-    levelData = parseLevelData(serverText, includeLevelString)
+    
+    if returnRaw: return serverText
 
+    levelData = parseLevelData(serverText, includeLevelString)
     return levelData
+
+print(getLevel(3150, False))
