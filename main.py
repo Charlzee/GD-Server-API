@@ -125,5 +125,3 @@ def getLevel(id: int, includeLevelString: bool = True, returnRaw: bool = False):
 
     levelData = parseLevelData(serverText, includeLevelString)
     return levelData
-
-print(getLevel(3150, False))
