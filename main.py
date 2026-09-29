@@ -1,6 +1,10 @@
 import requests
 import base64
 from itertools import cycle
+import os
+
+IS_STACKBLITZ = os.getenv("IS_STACKBLITZ", False)
+
 
 def _decryptXOR(data, key: str):
     return ''.join(chr(ord(char) ^ ord(keyChar)) for char, keyChar in zip(data, cycle(key)))
