@@ -10,6 +10,8 @@ def _decryptXOR(data, key: str):
     return ''.join(chr(ord(char) ^ ord(keyChar)) for char, keyChar in zip(data, cycle(key)))
 
 def _getDifficultyString(difficultyInt: int = 0, isDemon: bool = False):
+    global IS_STACKBLITZ
+    if IS_STACKBLITZ: return "unknown"
     if isDemon:
         match difficultyInt:
             case -1:
